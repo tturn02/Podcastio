@@ -1,7 +1,12 @@
 <template>
     <div>
         <div>
-            {{audioTitle}}
+            <h3>{{audioTitle}}</h3>
+            {{audioLength}}
+        </div>
+        <div>
+            <audio id="audio" controls="controls">
+            </audio>
         </div>
         <div>
             <v-btn raised @click="onPickFile" v-if="!audioTitle">
@@ -43,7 +48,8 @@
 
         data() {
             return {
-                audioTitle: ''
+                audioTitle: '',
+                audioLength: 0,
             }
         },
 
@@ -64,27 +70,40 @@
 
             onFilePicked(event) {
                 const files = event.target.files || event.dataTransfer.files
-
+                 const fileReader = new FileReader()
                 if (files && files[0]) {
                     let filename = files[0].name
-
-                    if (filename && filename.lastIndexOf('.') <= 0) {
-                        return //return alert('Please add a valid image!')
-                    }
-
-                    const fileReader = new FileReader()
-                    fileReader.addEventListener('load', () => {
-                        console.log(fileReader)
-                        this.audioTitle = "File Selected"
-                    })
+                   
                     fileReader.readAsDataURL(files[0])
 
+                    if (filename && filename.lastIndexOf('.') <= 0) {
+                        return alert('Please add a valid image!')
+                    }
+                    this.audioTitle = files[0].name
                     this.$emit('input', files[0])
                 }
+                    var app = this;
+
+                    fileReader.addEventListener("load", function(){
+                        var source = document.getElementById('audio');
+                        source.src = fileReader.result
+                        source.controls = true
+                        source.addEventListener('loadedmetadata', function() {
+                            console.log(", for: " + source.duration + "seconds.");
+                            var seconds = Math.ceil(source.duration)
+                            app.audioLength = seconds
+                            app.$emit('audioLength',app.audioLength)
+                        });
+
+                    })
+
+                    
             },
 
             removeFile() {
                 this.audioTitle = ''
+                var source = document.getElementById('audio');
+                source.src = ""
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar color="primary" app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Podcastio</span>
         <span class="font-weight-light">-Podcast Transcriber</span>
@@ -11,7 +11,7 @@
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
       >
-        <span class="mr-2">Latest Release</span>
+        <span class="mr-2">Proof of Concept</span>
       </v-btn>
     </v-toolbar>
 
